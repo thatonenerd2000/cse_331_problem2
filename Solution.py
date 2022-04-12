@@ -4,7 +4,7 @@ from collections import deque
 from Simulator import Simulator
 import sys
 
-class Solution:
+class Solution: #test for functionality
 
     def __init__(self, problem, isp, graph, info):
         self.problem = problem
