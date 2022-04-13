@@ -76,11 +76,10 @@ class Solution:
         BFS will not work
         Polssible solution, run a traversal based on highest bandwidths
         '''
+        # print(self.findPath(root,clients[clients.index(387)],graph))
+        # print(graph[5450])
 
-        print(self.findPath(root,clients[clients.index(387)],graph))
-        print(graph[5450])
-
-        # print(bfs_path(graph,root,clients))
+        bfs_path(graph,root,clients)
         #387: [2962, 5332, 7757, 1544, 387]
         
         # Note: You do not need to modify all of the above. For Problem 1, only the paths variable needs to be modified. If you do modify a variable you are not supposed to, you might notice different revenues outputted by the Driver locally since the autograder will ignore the variables not relevant for the problem.
