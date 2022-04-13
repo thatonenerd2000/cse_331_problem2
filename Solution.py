@@ -12,6 +12,23 @@ class Solution:
         self.graph = graph
         self.info = info
 
+    '''
+    param: self, list of nodes
+    return: type:tuple, gets the highest bandwidth tuple of (node,bandwidths)
+    '''
+    def maxBand(self, clientList):
+        bandwidths = self.info["bandwidths"]
+        bandwidthsTyuple = []
+        maxTuple = (0,0)
+        for client in clientList:
+            bandwidthsTyuple.append((client,bandwidths[client]))
+
+        for every in bandwidthsTyuple:
+            if every[1] > maxTuple[1]:
+                maxTuple = (every[0],every[1])
+
+        return maxTuple
+
     def output_paths(self):
         """
         This method must be filled in by you. You may add other methods and subclasses as you see fit,
@@ -19,8 +36,17 @@ class Solution:
         """
         paths, bandwidths, priorities = {}, {}, {}
 
-        paths = bfs_path(self.graph, self.isp, self.info["list_clients"])
-        client_delays = Simulator.get_delays(self.info["list_clients"])
+        #BFS will not work
+
+        root = self.isp
+        clients = self.info['list_clients']
+        graph = self.graph
+
+        '''
+        Polssible solution, run a traversal based on highest bandwidths
+        '''
+
+        
 
         
         # Note: You do not need to modify all of the above. For Problem 1, only the paths variable needs to be modified. If you do modify a variable you are not supposed to, you might notice different revenues outputted by the Driver locally since the autograder will ignore the variables not relevant for the problem.
