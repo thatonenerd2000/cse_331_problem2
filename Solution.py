@@ -29,6 +29,10 @@ class Solution: #test for functionality
 
         return maxTuple
 
+    '''
+    param: self, list of nodes
+    return: type:list, gets the list order sorted of the given clienlist based on bandwidths
+    '''
     def maxBandList(self, clientList):
         bandwidths = self.info["bandwidths"]
         bandwidthsTuple = []
@@ -44,6 +48,44 @@ class Solution: #test for functionality
 
         return bandwidthsNode
 
+    '''
+    param: self, list of nodes 1, list of nodes2
+    return: type:list, gets the list order sorted of the given clienlist based on bandwidths
+    '''
+    def bandwidthCompare(self,clientList1, clientList2):
+        cl1Total = 0
+        cl2Total = 0
+        bandwidths = self.info["bandwidths"]
+        for clients in clientList1:
+            cl1Total += bandwidths[clients]
+
+        for clients in clientList2:
+            cl2Total += bandwidths[clients]
+            
+        if cl1Total > cl2Total:
+            return clientList1
+
+        else:
+            return clientList2
+
+    '''
+    param: self, paths 1, paths 2, list of clients
+    return: type:paths, gets the path for each client with highest bandwidth from both traversals
+    '''
+    def compareBand(self, bfsPath, modifiedPath, clientsList):
+        paths = {}
+        for client in clientsList:
+            bfsPathComp = bfsPath[client]
+            modifiedPathComp = modifiedPath[client]
+            greaterBand = self.bandwidthCompare(bfsPathComp,modifiedPathComp)
+            paths[client] = greaterBand
+        
+        return paths
+
+    '''
+    param: self, list of nodes
+    return: type:list, reverses the given list
+    '''
     def Reverse(self,clients):
         clients.reverse()
         return clients
@@ -95,10 +137,13 @@ class Solution: #test for functionality
         BFS will not work
         Polssible solution, run a traversal based on highest bandwidths
         '''
-        paths = self.modified_bfs_path(graph,root,clients)
+        modifiedTraversal = self.modified_bfs_path(graph,root,clients)
+        bfsTraversal = bfs_path(graph,root,clients)
+        paths = self.compareBand(bfsTraversal,modifiedTraversal,clients)
         #387: [2962, 5332, 7757, 1544, 387]
         #bfs:Revenue: 12219702.0
         #modified:Revenue: 7807747.0
+        #compareModified:Revenue: 13199927.0
         
         # Note: You do not need to modify all of the above. For Problem 1, only the paths variable needs to be modified. If you do modify a variable you are not supposed to, you might notice different revenues outputted by the Driver locally since the autograder will ignore the variables not relevant for the problem.
         # WARNING: DO NOT MODIFY THE LINE BELOW, OR BAD THINGS WILL HAPPEN
