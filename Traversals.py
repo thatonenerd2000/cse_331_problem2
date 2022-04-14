@@ -14,7 +14,7 @@ def bfs_path(graph, isp, list_clients):
             if (priors[neighbor] == -1 and neighbor != isp):
                 priors[neighbor] = node
                 search_queue.append(neighbor)
-
+    print(priors)
     for client in list_clients:
         path = []
         current_node = client
