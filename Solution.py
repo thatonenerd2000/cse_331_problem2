@@ -77,8 +77,11 @@ class Solution:
         for client in clientsList:
             bfsPathComp = bfsPath[client]
             modifiedPathComp = modifiedPath[client]
-            greaterBand = self.bandwidthCompare(bfsPathComp,modifiedPathComp)
-            paths[client] = greaterBand
+            # greaterBand = self.bandwidthCompare(bfsPathComp,modifiedPathComp)
+            if self.info['alphas'][client] >= 9 and len(bfsPathComp) < 9:
+                paths[client] = bfsPathComp
+            else:
+                paths[client] = modifiedPathComp
         
         return paths
 
@@ -140,6 +143,8 @@ class Solution:
         modifiedTraversal = self.modified_bfs_path(graph,root,clients)
         bfsTraversal = bfs_path(graph,root,clients)
         paths = self.compareBand(bfsTraversal,modifiedTraversal,clients)
+
+        # print(self.info["alphas"])
         #387: [2962, 5332, 7757, 1544, 387]
         #bfs:Revenue: 12219702.0
         #modified:Revenue: 7807747.0
