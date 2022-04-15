@@ -56,7 +56,7 @@ class Solution:
 
     '''
     param: self, list of nodes 1, list of nodes2
-    return: type:list, gets the list order sorted of the given clienlist based on bandwidths
+    return: type:list of list, gets the list order sorted of both given clienlist based on bandwidths, 0 highest 1 lowest
     '''
     def bandwidthCompare(self,clientList1, clientList2):
         cl1Total = 0
@@ -183,7 +183,6 @@ class Solution:
         # paths = self.compareBand(bfsTraversal,modifiedTraversal,clients,routingDelaysBFS,routingDelayModified)
         paths = self.comparePaths(bfsTraversal, modifiedTraversal, clients, routingDelaysBFS, routingDelayModified)
 
-        # print(self.info["alphas"])
         #387: [2962, 5332, 7757, 1544, 387]
         #bfs:Revenue: 12219702.0
         #modified:Revenue: 7807747.0
