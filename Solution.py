@@ -92,6 +92,7 @@ class Solution: #test for functionality
 
 
     def modified_bfs_path(self, graph, isp, list_clients):
+
         paths = {}
 
         graph_size = len(graph)
@@ -126,7 +127,6 @@ class Solution: #test for functionality
         """
         paths, bandwidths, priorities = {}, {}, {}
 
-        #BFS will not work
 
         #same variables on the argument, but with references to self
         root = self.isp
@@ -137,8 +137,12 @@ class Solution: #test for functionality
         BFS will not work
         Polssible solution, run a traversal based on highest bandwidths
         '''
+        #dictionary: Each node's path with the highest bandwith
         modifiedTraversal = self.modified_bfs_path(graph,root,clients)
+
+        #dictionary: Each node's shortest path with the fewer nodes.
         bfsTraversal = bfs_path(graph,root,clients)
+        
         paths = self.compareBand(bfsTraversal,modifiedTraversal,clients)
         #387: [2962, 5332, 7757, 1544, 387]
         #bfs:Revenue: 12219702.0
