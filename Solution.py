@@ -50,7 +50,7 @@ class Solution:
 
     '''
     param: self, list of nodes 1, list of nodes2
-    return: type:list, gets the list order sorted of the given clienlist based on bandwidths
+    return: type:list of list, gets the list order sorted of both given clienlist based on bandwidths, 0 highest 1 lowest
     '''
     def bandwidthCompare(self,clientList1, clientList2):
         cl1Total = 0
@@ -63,10 +63,10 @@ class Solution:
             cl2Total += bandwidths[clients]
             
         if cl1Total > cl2Total:
-            return clientList1
+            return [clientList1,clientList2]
 
         else:
-            return clientList2
+            return [clientList2,clientList1]
 
     '''
     param: self, paths 1, paths 2, list of clients
@@ -77,11 +77,12 @@ class Solution:
         for client in clientsList:
             bfsPathComp = bfsPath[client]
             modifiedPathComp = modifiedPath[client]
-            # greaterBand = self.bandwidthCompare(bfsPathComp,modifiedPathComp)
-            if self.info['alphas'][client] >= 9 and len(bfsPathComp) < 9:
-                paths[client] = bfsPathComp
-            else:
-                paths[client] = modifiedPathComp
+            bandValue = self.bandwidthCompare(bfsPathComp,modifiedPathComp)
+            paths[client] = bandValue[0]
+            # if self.info['bandwidths'][client] >= 10:
+            #     paths = bandValue[1]
+            # else:
+            #     paths = bandValue[0]
         
         return paths
 
@@ -140,11 +141,21 @@ class Solution:
         BFS will not work
         Polssible solution, run a traversal based on highest bandwidths
         '''
+        
         modifiedTraversal = self.modified_bfs_path(graph,root,clients)
         bfsTraversal = bfs_path(graph,root,clients)
         paths = self.compareBand(bfsTraversal,modifiedTraversal,clients)
 
-        # print(self.info["alphas"])
+        simulator = Simulator()
+        is_rural = None if 'is_rural' not in self.info else self.info['is_rural']
+        simulator.run(graph, root, clients, paths, bandwidths, priorities, is_rural)
+        client_delays = simulator.get_delays(clients)
+
+
+
+
+
+
         #387: [2962, 5332, 7757, 1544, 387]
         #bfs:Revenue: 12219702.0
         #modified:Revenue: 7807747.0
