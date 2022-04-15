@@ -1,10 +1,9 @@
 from Traversals import bfs_path
-import heapq
 from collections import deque
 from Simulator import Simulator
 import sys
 
-class Solution:
+class Solution: #test for functionality
 
     def __init__(self, problem, isp, graph, info):
         self.problem = problem
@@ -126,6 +125,7 @@ class Solution:
 
 
     def modified_bfs_path(self, graph, isp, list_clients):
+
         paths = {}
 
         graph_size = len(graph)
@@ -160,7 +160,6 @@ class Solution:
         """
         paths, bandwidths, priorities = {}, {}, {}
 
-        #BFS will not work
 
         #same variables on the argument, but with references to self
         root = self.isp
@@ -171,19 +170,20 @@ class Solution:
         BFS will not work
         Polssible solution, run a traversal based on highest bandwidths
         '''
+        
         bandwidths = self.info['bandwidths'] if not None else None
         is_rural = None if 'is_rural' not in self.info else self.info['is_rural']
-
+        #dictionary: Each node's path with the highest bandwith
         modifiedTraversal = self.modified_bfs_path(graph,root,clients)
+        #dictionary: Each node's shortest path with the fewer nodes.
         bfsTraversal = bfs_path(graph,root,clients)
+
 
         routingDelaysBFS = self.getRoutingDelays(self.graph, self.isp, self.info["list_clients"], bfsTraversal, bandwidths, 0, is_rural)
         routingDelayModified = self.getRoutingDelays(self.graph, self.isp, self.info["list_clients"], modifiedTraversal, bandwidths, 0, is_rural)
 
         # paths = self.compareBand(bfsTraversal,modifiedTraversal,clients,routingDelaysBFS,routingDelayModified)
         paths = self.comparePaths(bfsTraversal, modifiedTraversal, clients, routingDelaysBFS, routingDelayModified)
-
-        
         #387: [2962, 5332, 7757, 1544, 387]
         #bfs:Revenue: 12219702.0
         #modified:Revenue: 7807747.0
