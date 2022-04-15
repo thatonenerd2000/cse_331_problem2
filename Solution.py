@@ -1,5 +1,4 @@
 from Traversals import bfs_path
-import heapq
 from collections import deque
 from Simulator import Simulator
 import sys
@@ -142,7 +141,7 @@ class Solution: #test for functionality
 
         #dictionary: Each node's shortest path with the fewer nodes.
         bfsTraversal = bfs_path(graph,root,clients)
-        
+
         paths = self.compareBand(bfsTraversal,modifiedTraversal,clients)
         #387: [2962, 5332, 7757, 1544, 387]
         #bfs:Revenue: 12219702.0
