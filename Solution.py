@@ -183,6 +183,7 @@ class Solution:
         # paths = self.compareBand(bfsTraversal,modifiedTraversal,clients,routingDelaysBFS,routingDelayModified)
         paths = self.comparePaths(bfsTraversal, modifiedTraversal, clients, routingDelaysBFS, routingDelayModified)
 
+        
         #387: [2962, 5332, 7757, 1544, 387]
         #bfs:Revenue: 12219702.0
         #modified:Revenue: 7807747.0
