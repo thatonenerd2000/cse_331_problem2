@@ -151,6 +151,7 @@ class Solution:
         simulator.run(graph, root, clients, paths, bandwidths, priorities, is_rural)
         client_delays = simulator.get_delays(clients)
 
+        print(client_delays)
 
 
 
