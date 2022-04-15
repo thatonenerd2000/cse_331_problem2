@@ -12,6 +12,12 @@ class Solution:
         self.graph = graph
         self.info = info
 
+    def getRoutingDelays(self, graph, root, clients, paths, bandwidths, priorities, is_rural):
+        simulator = Simulator()
+        simulator.run(graph, root, clients, paths, bandwidths, priorities, is_rural)
+
+        return simulator.get_delays(clients)
+
     '''
     param: self, list of nodes
     return: type:tuple, gets the highest bandwidth tuple of (node,bandwidths)
@@ -63,10 +69,10 @@ class Solution:
             cl2Total += bandwidths[clients]
             
         if cl1Total > cl2Total:
-            return clientList1
+            return [clientList1,clientList2]
 
         else:
-            return clientList2
+            return [clientList2,clientList1]
 
     '''
     param: self, paths 1, paths 2, list of clients
@@ -77,13 +83,38 @@ class Solution:
         for client in clientsList:
             bfsPathComp = bfsPath[client]
             modifiedPathComp = modifiedPath[client]
-            # greaterBand = self.bandwidthCompare(bfsPathComp,modifiedPathComp)
-            if self.info['alphas'][client] >= 9 and len(bfsPathComp) < 9:
-                paths[client] = bfsPathComp
+            greaterBand = self.bandwidthCompare(bfsPathComp,modifiedPathComp)
+            if self.info["alphas"][client] >= 10:
+                if len(greaterBand[0]) > len(greaterBand[1]):
+                    paths[client] = greaterBand[1]
+                else:
+                    paths[client] = greaterBand[0]
             else:
-                paths[client] = modifiedPathComp
+                paths[client] = greaterBand[0]
         
         return paths
+
+    '''
+    param: self, paths 1, paths 2, list of clients, routingDelay of bfs, routingDelay of modified
+    return: type:paths, gets the path for each client with lowest delays from both traversals
+    '''
+    def comparePaths(self, bfsPath, modifiedPath, clientsList, bfsDelays, modifiedDelays):
+        paths = {}
+        for client in clientsList:
+            bfsPathComp = bfsPath[client]
+            modifiedPathComp = modifiedPath[client]
+            bfsDelay = bfsDelays[client]
+            modifiedDelay =  modifiedDelays[client]
+
+            if bfsDelay > modifiedDelay:
+                paths[client] = modifiedPathComp
+            else:
+                paths[client] = bfsPathComp
+
+        return paths
+
+
+
 
     '''
     param: self, list of nodes
@@ -140,16 +171,26 @@ class Solution:
         BFS will not work
         Polssible solution, run a traversal based on highest bandwidths
         '''
+        bandwidths = self.info['bandwidths'] if not None else None
+        is_rural = None if 'is_rural' not in self.info else self.info['is_rural']
+
         modifiedTraversal = self.modified_bfs_path(graph,root,clients)
         bfsTraversal = bfs_path(graph,root,clients)
-        paths = self.compareBand(bfsTraversal,modifiedTraversal,clients)
+
+        routingDelaysBFS = self.getRoutingDelays(self.graph, self.isp, self.info["list_clients"], bfsTraversal, bandwidths, 0, is_rural)
+        routingDelayModified = self.getRoutingDelays(self.graph, self.isp, self.info["list_clients"], modifiedTraversal, bandwidths, 0, is_rural)
+
+        # paths = self.compareBand(bfsTraversal,modifiedTraversal,clients,routingDelaysBFS,routingDelayModified)
+        paths = self.comparePaths(bfsTraversal, modifiedTraversal, clients, routingDelaysBFS, routingDelayModified)
 
         # print(self.info["alphas"])
         #387: [2962, 5332, 7757, 1544, 387]
         #bfs:Revenue: 12219702.0
         #modified:Revenue: 7807747.0
         #compareModified:Revenue: 13199927.0
-        
+        #compareModfiedRoutingDelays: Revenue: 13487968.0
+
+
         # Note: You do not need to modify all of the above. For Problem 1, only the paths variable needs to be modified. If you do modify a variable you are not supposed to, you might notice different revenues outputted by the Driver locally since the autograder will ignore the variables not relevant for the problem.
         # WARNING: DO NOT MODIFY THE LINE BELOW, OR BAD THINGS WILL HAPPEN
         return (paths, bandwidths, priorities)
